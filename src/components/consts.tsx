@@ -1,17 +1,17 @@
 export const galleryImages = [
-  "src/assets/1.png",
-  "src/assets/2.png",
-  "src/assets/3.png",
-  "src/assets/4.png",
-  "src/assets/5.png",
-  "src/assets/6.png",
+  "/1.png",
+  "/2.png",
+  "/3.png",
+  "/4.png",
+  "/5.png",
+  "/6.png",
 ];
 
 export const clinicImages = [
-  'src/assets/p1.jpg',
-  'src/assets/p3.jpg',
-  'src/assets/p4.jpg',
-  'src/assets/p2.jpg',
+  '/p1.jpg',
+  '/p3.jpg',
+  '/p4.jpg',
+  '/p2.jpg',
 ]
 
 export const socials = [

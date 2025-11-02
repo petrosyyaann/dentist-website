@@ -106,7 +106,7 @@ export default function App() {
             <div className="absolute -inset-2 sm:-inset-4 border border-white/10"></div>
             <div className="aspect-[3/4] relative overflow-hidden">
               <ImageWithFallback
-                src="src/assets/main.jpg"
+                src="/main.jpg"
                 alt="Девлетмурзаев Исламутдин"
                 className="w-full h-full object-cover contrast-125"
               />
