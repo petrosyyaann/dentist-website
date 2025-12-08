@@ -149,7 +149,6 @@ export default function App() {
             <div className="h-px bg-white/20 w-20 sm:w-32"></div>
           </motion.div>
 
-          {/* Detailed Philosophy */}
           <motion.div
             className="grid md:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 max-w-6xl"
             initial="hidden"
@@ -157,9 +156,7 @@ export default function App() {
             viewport={{ once: true }}
             variants={{
               hidden: {},
-              visible: {
-                transition: { staggerChildren: 0.15 }
-              }
+              visible: { transition: { staggerChildren: 0.15 } }
             }}
           >
             <motion.div
@@ -169,16 +166,16 @@ export default function App() {
               <motion.div className="border-l border-white/20 pl-4 sm:pl-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: .8 } } }}>
                 <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Работа под увеличением</h3>
                 <p className="text-xs sm:text-sm leading-loose opacity-60">
-                  Бинокуляры на каждой процедуре.<br />
-                  Точность на микронном уровне.
+                  Точная и деликатная работа под бинокулярами.<br />
+                  Контроль анатомии, уважение к здоровым тканям.
                 </p>
               </motion.div>
 
               <motion.div className="border-l border-white/20 pl-4 sm:pl-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: .8 } } }}>
-                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Коффердам-изоляция</h3>
+                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Изоляция рабочего поля</h3>
                 <p className="text-xs sm:text-sm leading-loose opacity-60">
-                  Стерильность рабочего поля.<br />
-                  Предсказуемость результата.
+                  Коффердам для стерильности и биологического контроля среды.<br />
+                  Минимизация бактериальной нагрузки и повышение адгезии.
                 </p>
               </motion.div>
             </motion.div>
@@ -188,28 +185,26 @@ export default function App() {
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: .8, ease: "easeOut", delay: 0.1 } } }}
             >
               <motion.div className="border-l border-white/20 pl-4 sm:pl-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: .8 } } }}>
-                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Работа в четыре руки</h3>
+                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Ассистирование</h3>
                 <p className="text-xs sm:text-sm leading-loose opacity-60">
-                  Оптимизация каждого этапа.<br />
-                  Максимальный комфорт.
+                  Работа в четыре руки для высокой стерильности и точности.<br />
+                  Рационализация времени и снижение операционной нагрузки.
                 </p>
               </motion.div>
 
               <motion.div className="border-l border-white/20 pl-4 sm:pl-6" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: .8 } } }}>
-                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Доказательная медицина</h3>
+                <h3 className="text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-4 tracking-tight">Доказательный подход</h3>
                 <p className="text-xs sm:text-sm leading-loose opacity-60">
-                  Научно подтверждённые методики.<br />
-                  Современные международные стандарты.
+                  Клинические решения на основе современных исследований и протоколов.<br />
+                  Приоритет — биологическая целостность и долговечность результата.
                 </p>
               </motion.div>
             </motion.div>
-
           </motion.div>
         </div>
       </section>
 
-
-      {/* Clinical Expertise - Large Format */}
+      {/* Clinical Expertise */}
       <section id="expertise" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
 
@@ -227,118 +222,61 @@ export default function App() {
           <div className="space-y-0">
 
             {/* Endodontics */}
-            <motion.div
-              className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: .9, ease: "easeOut" }}
-              whileHover={{ scale: 1.01 }}
-            >
+            <motion.div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500">
               <div className="lg:col-span-2">
                 <div className="text-[10px] sm:text-xs tracking-[0.3em] uppercase opacity-30">01</div>
               </div>
-              <motion.div
-                className="lg:col-span-3"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .1 }}
-              >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6">
-                  <ToothIcon />
-                </div>
+              <div className="lg:col-span-3">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6"><ToothIcon /></div>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-3 sm:mb-4">Эндодонтия</h3>
                 <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase opacity-40">
-                  Лечение корневых каналов
+                  Сохранение витальности и структуры
                 </p>
-              </motion.div>
-              <motion.div
-                className="lg:col-span-7 space-y-4 sm:space-y-6"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .15 }}
-              >
+              </div>
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
                 <p className="text-sm sm:text-base leading-loose opacity-70">
-                  Лечение корневых каналов под увеличением.<br />
-                  Современные никель-титановые инструменты.<br />
-                  Термопластическая обтурация.
+                  Эндодонтия с прицельным контролем анатомии и деликатным доступом.<br />
+                  Биосовместимые материалы, 3D-обтурация, сохранение максимума здоровых тканей.
                 </p>
                 <div className="text-xs sm:text-sm opacity-50 pt-2 sm:pt-4 space-y-2">
-                  <div>→ Сложная анатомия</div>
+                  <div>→ Трудная анатомия</div>
                   <div>→ Повторное лечение</div>
-                  <div>→ Фотопротокол этапов</div>
+                  <div>→ Документирование процессов</div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
 
             {/* Prosthetics */}
-            <motion.div
-              className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: .9, ease: "easeOut", delay: .1 }}
-              whileHover={{ scale: 1.01 }}
-            >
+            <motion.div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500">
               <div className="lg:col-span-2">
                 <div className="text-[10px] sm:text-xs tracking-[0.3em] uppercase opacity-30">02</div>
               </div>
-              <motion.div
-                className="lg:col-span-3"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .2 }}
-              >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6">
-                  <CrownIcon />
-                </div>
+              <div className="lg:col-span-3">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6"><CrownIcon /></div>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-3 sm:mb-4">Ортопедия</h3>
                 <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase opacity-40">
-                  Протезирование
+                  Биомиметическое восстановление
                 </p>
-              </motion.div>
-              <motion.div
-                className="lg:col-span-7 space-y-4 sm:space-y-6"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .25 }}
-              >
+              </div>
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
                 <p className="text-sm sm:text-base leading-loose opacity-70">
-                  Несъёмное и съёмное протезирование.<br />
-                  Цифровые протоколы: сканирование, CAD/CAM.<br />
-                  Работа с керамикой и диоксидом циркония.
+                  Персонализированные реставрации, цифровая диагностика и планирование.<br />
+                  Протезирование с учётом окклюзии и тканевой биологии.
                 </p>
                 <div className="text-xs sm:text-sm opacity-50 pt-2 sm:pt-4 space-y-2">
                   <div>→ Виниры и вкладки</div>
                   <div>→ Коронки и мосты</div>
-                  <div>→ Протезирование на имплантатах</div>
+                  <div>→ Работа с имплантатами</div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
 
             {/* Restorative */}
-            <motion.div
-              className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: .9, ease: "easeOut", delay: .15 }}
-              whileHover={{ scale: 1.01 }}
-            >
+            <motion.div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500">
               <div className="lg:col-span-2">
                 <div className="text-[10px] sm:text-xs tracking-[0.3em] uppercase opacity-30">03</div>
               </div>
-              <motion.div
-                className="lg:col-span-3"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .25 }}
-              >
+              <div className="lg:col-span-3">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6">
                   <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
                     <path d="M12 24c0-6 4-12 12-12s12 6 12 12" strokeLinecap="round" />
@@ -349,84 +287,56 @@ export default function App() {
                 </div>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-3 sm:mb-4">Эстетика</h3>
                 <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase opacity-40">
-                  Реставрация улыбки
+                  Минимально инвазивные реставрации
                 </p>
-              </motion.div>
-              <motion.div
-                className="lg:col-span-7 space-y-4 sm:space-y-6"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .3 }}
-              >
+              </div>
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
                 <p className="text-sm sm:text-base leading-loose opacity-70">
-                  Прямые композитные реставрации.<br />
-                  Композитные виниры.<br />
-                  Минимально инвазивная стоматология.
+                  Биомиметическая адгезивная стоматология.<br />
+                  Восстановление анатомии с сохранением тканей и природной оптики.
                 </p>
                 <div className="text-xs sm:text-sm opacity-50 pt-2 sm:pt-4 space-y-2">
-                  <div>→ Многослойная техника</div>
-                  <div>→ Коррекция формы и цвета</div>
-                  <div>→ Естественная прозрачность</div>
+                  <div>→ Послойная техника</div>
+                  <div>→ Индивидуальный подбор цвета и формы</div>
+                  <div>→ Нативная прозрачность</div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
 
             {/* Therapeutic */}
-            <motion.div
-              className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-b border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: .9, ease: "easeOut", delay: .2 }}
-              whileHover={{ scale: 1.01 }}
-            >
+            <motion.div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 border-t border-b border-white/10 py-8 sm:py-12 lg:py-16 hover:bg-zinc-950 transition-colors duration-500">
               <div className="lg:col-span-2">
                 <div className="text-[10px] sm:text-xs tracking-[0.3em] uppercase opacity-30">04</div>
               </div>
-              <motion.div
-                className="lg:col-span-3"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .35 }}
-              >
+              <div className="lg:col-span-3">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-4 sm:mb-6">
                   <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
-                    <circle cx="24" cy="24" r="12" strokeLinecap="round" />
-                    <circle cx="24" cy="24" r="8" strokeLinecap="round" />
-                    <circle cx="24" cy="24" r="4" strokeLinecap="round" />
+                    <circle cx="24" cy="24" r="12" />
+                    <circle cx="24" cy="24" r="8" />
+                    <circle cx="24" cy="24" r="4" />
                   </svg>
                 </div>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-3 sm:mb-4">Терапия</h3>
                 <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase opacity-40">
-                  Консервативное лечение
+                  Сохранение биологии зуба
                 </p>
-              </motion.div>
-              <motion.div
-                className="lg:col-span-7 space-y-4 sm:space-y-6"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: .8, delay: .4 }}
-              >
+              </div>
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
                 <p className="text-sm sm:text-base leading-loose opacity-70">
-                  Лечение кариеса с применением коффердама.<br />
-                  Профессиональная гигиена полости рта.<br />
-                  Профилактика стоматологических заболеваний.
+                  Минимальная инвазия, точная диагностика и профилактика рецидивов.<br />
+                  Комплексный подход к здоровью твёрдых и мягких тканей.
                 </p>
                 <div className="text-xs sm:text-sm opacity-50 pt-2 sm:pt-4 space-y-2">
-                  <div>→ Диагностика на ранних стадиях</div>
-                  <div>→ Адгезивные протоколы</div>
-                  <div>→ Индивидуальная профилактика</div>
+                  <div>→ Ранняя диагностика</div>
+                  <div>→ Современные адгезивные протоколы</div>
+                  <div>→ Персонализированная профилактика</div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
 
           </div>
         </div>
       </section>
-
 
       {/* Education - Structured */}
       <section id="education" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-12 bg-zinc-950">
