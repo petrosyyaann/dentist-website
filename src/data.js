@@ -118,8 +118,8 @@ export const cases = [
     portrait: true,
   },
   { title: "Скол зуба 2.3", tag: "Эндодонтия · Build-up", slides: ["chip-23"], portrait: true },
-  { title: "Реставрация зуба 1.1", tag: "Эстетика", slides: ["restoration-11"] },
-  { title: "Реставрация зуба 2.1", tag: "Эстетика", slides: ["restoration-21"] },
+  { title: "Реставрация зуба 1.1", tag: "Реставрация", slides: ["restoration-11"] },
+  { title: "Реставрация зуба 2.1", tag: "Реставрация", slides: ["restoration-21"] },
   {
     title: "Реставрация зуба 4.6",
     tag: "Гигиена · Терапия",

@@ -11,3 +11,7 @@ html { font-size: var(--font-size); scroll-behavior: smooth; }
 
 /* Смещение якорей под фиксированное меню */
 section[id] { scroll-margin-top: 72px; }
+
+/* Горизонтальная лента без видимой полосы прокрутки */
+.no-scrollbar { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
