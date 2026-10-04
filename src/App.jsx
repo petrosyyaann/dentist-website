@@ -378,7 +378,7 @@ export default function App() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  <div className={`relative aspect-[4/3] overflow-hidden ${c.dark ? "bg-zinc-900" : "bg-white"}`}>
+                  <div className={`relative aspect-square overflow-hidden ${c.dark ? "bg-zinc-900" : "bg-white"}`}>
                     <img
                       src={`/img/cases/${c.slides[0]}-sm.jpg`}
                       alt={`${c.title}: фото до и после лечения`}

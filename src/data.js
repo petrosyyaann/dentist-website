@@ -109,27 +109,25 @@ export const certificates = [
   thumb: `/img/certs/${c.id}-sm.jpg`,
 }));
 
-// slides — файлы из public/img/cases (без расширения). dark: слайд на тёмном фоне, portrait: вертикальный слайд
+// slides — файлы из public/img/cases (без расширения).
 export const cases = [
-  {
-    title: "Хронический пульпит зуба 3.6",
-    tag: "Эндодонтия",
-    slides: ["pulpitis-36-1", "pulpitis-36-2", "pulpitis-36-3"],
-    portrait: true,
-  },
-  { title: "Скол зуба 2.3", tag: "Эндодонтия · Build-up", slides: ["chip-23"], portrait: true },
-  { title: "Реставрация зуба 1.1", tag: "Реставрация", slides: ["restoration-11"] },
-  { title: "Реставрация зуба 2.1", tag: "Реставрация", slides: ["restoration-21"] },
-  {
-    title: "Реставрация зуба 4.6",
-    tag: "Гигиена · Терапия",
-    slides: ["restoration-46-1", "restoration-46-2"],
-    portrait: true,
-  },
-  { title: "Лечение кариеса 4.6", tag: "Терапия", slides: ["caries-46"] },
-  { title: "Лечение зуба 4.5", tag: "Терапия", slides: ["treatment-45"], dark: true },
-  { title: "Профессиональная гигиена полости рта", tag: "Гигиена", slides: ["hygiene-1"] },
-  { title: "Профессиональная гигиена: до и после", tag: "Гигиена", slides: ["hygiene-2"], dark: true },
+  { title: "Протезирование на имплантатах", tag: "Ортопедия", slides: ["case_01_montserrat"], dark: true },
+  { title: "Эндодонтия и коронка на зуб 1.5", tag: "Эндодонтия · Ортопедия", slides: ["case_02_montserrat"], dark: true },
+  { title: "Перелечивание с извлечением фрагментов", tag: "Эндодонтия", slides: ["case_03_montserrat"], dark: true },
+  { title: "Перелечивание зуба 3.6", tag: "Эндодонтия", slides: ["case_04_montserrat"], dark: true },
+  { title: "Перелечивание зуба 2.6", tag: "Эндодонтия", slides: ["case_05_montserrat"], dark: true },
+  { title: "Первичное эндодонтическое лечение 3.6", tag: "Эндодонтия", slides: ["case_06_montserrat"], dark: true },
+  { title: "Восстановление разрушенного зуба 3.5", tag: "Эндодонтия · Build-up", slides: ["case_07_montserrat"], dark: true },
+  { title: "Эндодонтические этапы лечения 3.7", tag: "Эндодонтия", slides: ["case_08_montserrat"], dark: true },
+  { title: "Эндодонтическое лечение зуба 4.6", tag: "Эндодонтия", slides: ["case_09_montserrat"], dark: true },
+  { title: "Реставрации фронтальной группы", tag: "Реставрация", slides: ["case_10_montserrat"], dark: true },
+  { title: "Восстановление МОД-дефекта 1.6", tag: "Реставрация", slides: ["case_11_montserrat"], dark: true },
+  { title: "Реставрация зуба 3.7", tag: "Реставрация", slides: ["case_12_montserrat"], dark: true },
+  { title: "Реставрация зубов 2.5 и 2.6", tag: "Реставрация", slides: ["case_13_montserrat"], dark: true },
+  { title: "Реставрация премоляров 1.4 и 1.5", tag: "Реставрация", slides: ["case_14_montserrat"], dark: true },
+  { title: "Глубокий дистальный дефект 1.7", tag: "Реставрация", slides: ["case_15_montserrat"], dark: true },
+  { title: "Клиновидные дефекты 1.3 и 1.4", tag: "Реставрация", slides: ["case_16_montserrat"], dark: true },
+  { title: "Прямая реставрация зубов 4.6 и 4.7", tag: "Реставрация", slides: ["case_17_montserrat"], dark: true },
 ];
 
 export const portfolioPreview = ["/img/p1-sm.jpg", "/img/p3-sm.jpg", "/img/p4-sm.jpg", "/img/p2-sm.jpg"];
