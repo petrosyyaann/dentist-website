@@ -9,7 +9,6 @@ import { AnimatePresence, motion } from "motion/react";
 export default function Lightbox({ items, index, onClose, onChange }) {
   const open = index !== null && index >= 0;
   const touch = useRef(null);
-  const [loaded, setLoaded] = useState(false);
   const count = items.length;
   const item = open ? items[index] : null;
 
@@ -34,17 +33,6 @@ export default function Lightbox({ items, index, onClose, onChange }) {
     };
   }, [open, index]);
 
-  // Предзагрузка соседних изображений
-  useEffect(() => {
-    if (!open || count < 2) return;
-    [1, -1].forEach((s) => {
-      const img = new Image();
-      img.src = items[(index + s + count) % count].src;
-    });
-  }, [open, index]);
-
-  useEffect(() => setLoaded(false), [index]);
-
   const onTouchStart = (e) => {
     const t = e.touches[0];
     touch.current = { x: t.clientX, y: t.clientY };
@@ -64,7 +52,7 @@ export default function Lightbox({ items, index, onClose, onChange }) {
       {open && (
         <motion.div
           key="lightbox"
-          className="fixed inset-0 z-[60] bg-black flex flex-col text-white select-none"
+          className="fixed inset-0 z-[60] bg-black flex flex-col text-white select-none lightbox"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -115,25 +103,7 @@ export default function Lightbox({ items, index, onClose, onChange }) {
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            {!loaded && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-8 h-8 border border-white/20 border-t-white/70 rounded-full animate-spin" />
-              </div>
-            )}
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.img
-                key={item.src}
-                src={item.src}
-                alt={item.title}
-                onLoad={() => setLoaded(true)}
-                className="max-w-full max-h-full object-contain"
-                draggable={false}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: loaded ? 1 : 0, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              />
-            </AnimatePresence>
+            <LightboxImage key={item.src} item={item} />
 
             {count > 1 && (
               <>
@@ -182,5 +152,39 @@ function NavButton({ side, onClick }) {
         <path d={left ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
+  );
+}
+
+// Native images remain visible even if a cached load event arrives before an effect.
+function LightboxImage({ item }) {
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const src = attempt ? `${item.src}?retry=${attempt}` : item.src;
+
+  return (
+    <div className="absolute inset-0 mx-2 sm:mx-20">
+      <img src={item.thumb || item.src} alt="" aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-contain" />
+      {!failed && (
+        <img key={src} src={src} alt={item.title} draggable={false}
+          ref={(img) => { if (img?.complete && img.naturalWidth > 0) setLoaded(true); }}
+          onLoad={() => setLoaded(true)} onError={() => setFailed(true)}
+          className="absolute inset-0 w-full h-full object-contain" />
+      )}
+      {!loaded && !failed && (
+        <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none" role="status" aria-label="Загрузка фотографии">
+          <div className="w-6 h-6 border border-white/30 border-t-white rounded-full animate-spin" />
+        </div>
+      )}
+      {failed && (
+        <div className="absolute bottom-3 inset-x-0 flex justify-center">
+          <button className="bg-black/85 border border-white/30 px-4 py-3 text-sm"
+            onClick={() => { setFailed(false); setLoaded(false); setAttempt((n) => n + 1); }}>
+            Фото не загрузилось — повторить
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

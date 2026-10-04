@@ -8,7 +8,7 @@ const Z = motion;
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } };
 const stagger = (s) => ({ hidden: {}, visible: { transition: { staggerChildren: s } } });
-const inView = { initial: "hidden", whileInView: "visible", viewport: { once: true, margin: "-60px" } };
+const inView = { initial: false, whileInView: "visible", viewport: { once: true, margin: "-60px" } };
 
 const eyebrow = "text-[10px] sm:text-xs tracking-[0.25em] uppercase text-white/35";
 const sectionPad = "py-20 sm:py-28 lg:py-32 px-5 sm:px-8 lg:px-12";
@@ -113,8 +113,8 @@ export default function App() {
     () =>
       cases.flatMap((c) =>
         c.slides.map((s, i) => ({
-          src: `/img/cases/${s}.jpg`,
-          thumb: `/img/cases/${s}-sm.jpg`,
+          src: `/img/cases/${s}.webp`,
+          thumb: `/img/cases/${s}-sm.webp`,
           title: c.title,
           subtitle: c.slides.length > 1 ? `${c.tag} · слайд ${i + 1} из ${c.slides.length}` : c.tag,
         }))
@@ -137,7 +137,7 @@ export default function App() {
     <Z.button
       key={c.id}
       onClick={() => openCert(c.id)}
-      initial={{ opacity: 0, y: 10 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: i * 0.03 }}
       className="w-full text-left flex items-start gap-4 sm:gap-6 group py-4 border-t border-white/10"
@@ -190,7 +190,7 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <Z.nav className="flex-1 flex flex-col justify-center px-5" initial="hidden" animate="visible" variants={stagger(0.05)}>
+            <Z.nav className="flex-1 flex flex-col justify-center px-5" initial={false} animate="visible" variants={stagger(0.05)}>
               {navLinks.map(([href, label], i) => (
                 <Z.a key={href} href={href} onClick={() => setMenuOpen(false)} variants={fadeUp} className="flex items-baseline gap-4 py-3">
                   <span className="text-[10px] tabular-nums text-white/30">0{i + 1}</span>
@@ -221,9 +221,9 @@ export default function App() {
           <Z.img
             src="/img/main.jpg"
             alt=""
-            fetchPriority="high"
+            fetchpriority="high"
             className="w-full h-full object-cover object-[50%_15%] contrast-125"
-            initial={{ scale: 1.06 }}
+            initial={false}
             animate={{ scale: 1 }}
             transition={{ duration: 1.6, ease: "easeOut" }}
           />
@@ -231,7 +231,7 @@ export default function App() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-[100svh] min-h-[600px] lg:h-auto lg:min-h-screen lg:pt-28 lg:pb-16 flex lg:grid lg:grid-cols-2 lg:gap-16 items-end lg:items-center">
-          <Z.div className="w-full pb-12 sm:pb-16 lg:pb-0" initial="hidden" animate="visible" variants={stagger(0.14)}>
+          <Z.div className="w-full pb-12 sm:pb-16 lg:pb-0" initial={false} animate="visible" variants={stagger(0.14)}>
             <Z.p variants={fadeUp} className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-white/55 mb-5 lg:mb-8">
               Врач-стоматолог · Москва
             </Z.p>
@@ -254,7 +254,7 @@ export default function App() {
           {/* Десктоп: крупное фото справа */}
           <Z.div
             className="hidden lg:block relative"
-            initial={{ opacity: 0, y: 40 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, ease: "easeOut", delay: 0.2 }}
           >
@@ -373,7 +373,7 @@ export default function App() {
                   key={c.title + i}
                   onClick={() => openCase(i)}
                   className={`${hidden} group text-left`}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
@@ -381,7 +381,7 @@ export default function App() {
                   {/* Скрываем верхние 10% с названием и тегами; подписи к фото остаются. */}
                   <div className="relative aspect-[10/9] overflow-hidden bg-black">
                     <img
-                      src={`/img/cases/${c.slides[0]}-sm.jpg`}
+                      src={`/img/cases/${c.slides[0]}-sm.webp`}
                       alt={`${c.title}: фото до и после лечения`}
                       loading="lazy"
                       className="absolute bottom-0 left-0 w-full h-auto origin-bottom transition-transform duration-700 group-hover:scale-105"
@@ -392,7 +392,7 @@ export default function App() {
                       {c.tag}
                       {c.slides.length > 1 && <span className="text-white/25"> · {c.slides.length} фото</span>}
                     </div>
-                    <div className="text-sm sm:text-lg leading-snug tracking-tight text-white/85 group-hover:text-white transition-colors line-clamp-2 min-h-[2lh]">{c.title}</div>
+                    <div className="text-sm sm:text-lg leading-snug tracking-tight text-white/85 group-hover:text-white transition-colors line-clamp-2 min-h-[2.75em]">{c.title}</div>
                   </div>
                 </Z.button>
               );
@@ -409,9 +409,9 @@ export default function App() {
 
       {/* Контакты */}
       <section id="contact" className="py-16 sm:py-24 lg:py-32 px-5 sm:px-8 lg:px-12 bg-white text-black">
-        <Z.div className="max-w-7xl mx-auto" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: "easeOut" }}>
+        <Z.div className="max-w-7xl mx-auto" initial={false} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: "easeOut" }}>
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20">
-            <Z.div className="space-y-8 sm:space-y-12" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}>
+            <Z.div className="space-y-8 sm:space-y-12" initial={false} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}>
               <div>
                 <h2 className="text-[34px] sm:text-5xl lg:text-7xl tracking-tighter mb-4 sm:mb-6">Консультация</h2>
                 <div className="h-px bg-black/20 w-20 sm:w-32" />
@@ -441,7 +441,7 @@ export default function App() {
                 ))}
               </div>
             </Z.div>
-            <Z.div className="space-y-10 sm:space-y-12 lg:space-y-16" initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}>
+            <Z.div className="space-y-10 sm:space-y-12 lg:space-y-16" initial={false} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}>
               <div className="space-y-3 sm:space-y-4">
                 <div className="text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase opacity-40">Телефон</div>
                 <a href="tel:+79255522001" className="block text-2xl sm:text-3xl tracking-tight hover:opacity-60 transition-opacity">
