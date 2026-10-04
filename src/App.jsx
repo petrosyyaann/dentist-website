@@ -378,12 +378,13 @@ export default function App() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  <div className={`relative aspect-square overflow-hidden ${c.dark ? "bg-zinc-900" : "bg-white"}`}>
+                  {/* Скрываем верхние 10% с названием и тегами; подписи к фото остаются. */}
+                  <div className="relative aspect-[10/9] overflow-hidden bg-black">
                     <img
                       src={`/img/cases/${c.slides[0]}-sm.jpg`}
                       alt={`${c.title}: фото до и после лечения`}
                       loading="lazy"
-                      className="w-full h-full object-contain p-1.5 sm:p-3 transition-transform duration-700 group-hover:scale-105"
+                      className="absolute bottom-0 left-0 w-full h-auto origin-bottom transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                   <div className="pt-3 sm:pt-4">
