@@ -366,14 +366,14 @@ export default function App() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  {/* Prepared cover shown in full, including embedded labels. */}
-                  <div className="relative aspect-square bg-black">
+                  {/* Trim the title and footer only in the grid preview. */}
+                  <div className="relative aspect-[100/81] overflow-hidden bg-black">
                     <img
                       src={`/img/cases/${c.slides[0]}-sm.webp`}
                       alt={`${c.title}: обложка клинического случая`}
                       loading="lazy"
                       width="800" height="800" decoding="async"
-                      className="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-90"
+                      className="absolute top-0 left-0 w-full h-auto -translate-y-[13%] transition-opacity duration-300 group-hover:opacity-90"
                     />
                   </div>
                   <div className="pt-3 sm:pt-4">
