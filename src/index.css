@@ -19,3 +19,10 @@ section[id] { scroll-margin-top: 72px; }
 /* Keep a consistent canvas during loading and Safari history restoration. */
 html, body, #root { background: #000; color: #fff; }
 .lightbox { height: 100%; height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+
+@font-face { font-family: Montserrat; src: url('/fonts/Montserrat.woff') format('woff'); font-weight: 100 900; font-style: normal; font-display: swap; }
+#portfolio, .lightbox { font-family: Montserrat, Arial, sans-serif; }
+.case-card:focus-visible, .lightbox button:focus-visible, .lightbox a:focus-visible { outline: 1px solid #fff; outline-offset: 4px; }
+@keyframes slide-reveal { from { opacity: .65; } to { opacity: 1; } }
+.lightbox-image { animation: slide-reveal .25s ease-out; }
+@media (prefers-reduced-motion: reduce) { .lightbox-image { animation: none; } }

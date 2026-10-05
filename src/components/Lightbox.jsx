@@ -1,190 +1,144 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 
-/**
- * Полноэкранный просмотр изображений.
- * items: [{ src, title, subtitle }]
- * Управление: стрелки ← →, Esc, свайп на телефоне, клик по фону — закрыть.
- */
-export default function Lightbox({ items, index, onClose, onChange }) {
-  const open = index !== null && index >= 0;
+/** Shared viewer: case slides use a minimal layout; certificates retain details. */
+export default function Lightbox({ items, index, onClose, onChange, minimal = false }) {
+  const open = index !== null && index >= 0 && index < items.length;
   const touch = useRef(null);
+  const dialog = useRef(null);
   const count = items.length;
   const item = open ? items[index] : null;
-
-  const go = (step) => {
-    if (!open) return;
-    onChange((index + step + count) % count);
-  };
+  const go = (step) => onChange((index + step + count) % count);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialog.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus({ preventScroll: true });
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event) => {
+      if (event.key === "Escape") { event.preventDefault(); onClose(); }
+      if (event.key === "ArrowRight") { event.preventDefault(); go(1); }
+      if (event.key === "ArrowLeft") { event.preventDefault(); go(-1); }
+      if (event.key === "Tab") {
+        const controls = [...dialog.current.querySelectorAll('button, a[href]')]
+          .filter((el) => el.getClientRects().length && !el.disabled);
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog.current)) {
+          event.preventDefault(); last?.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialog.current)) {
+          event.preventDefault(); first?.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open, index]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, index, count, onClose, onChange]);
 
-  const onTouchStart = (e) => {
-    const t = e.touches[0];
-    touch.current = { x: t.clientX, y: t.clientY };
+  const onTouchStart = (event) => {
+    touch.current = event.touches.length === 1
+      ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
   };
-  const onTouchEnd = (e) => {
-    if (!touch.current || e.touches.length > 0) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - touch.current.x;
-    const dy = t.clientY - touch.current.y;
+  const onTouchEnd = (event) => {
+    if (!touch.current || event.touches.length || !event.changedTouches.length) return;
+    const end = event.changedTouches[0];
+    const dx = end.clientX - touch.current.x, dy = end.clientY - touch.current.y;
     touch.current = null;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
-    else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) onClose();
+    if (count > 1 && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) go(dx < 0 ? 1 : -1);
   };
 
-  return (
+  if (typeof document === "undefined") return null;
+  return createPortal(
     <AnimatePresence>
       {open && (
-        <motion.div
-          key="lightbox"
-          className="fixed inset-0 z-[60] bg-black flex flex-col text-white select-none lightbox"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          role="dialog"
-          aria-modal="true"
-          aria-label={item.title}
-        >
-          {/* Верхняя панель */}
-          <div className="flex items-start justify-between gap-4 px-4 sm:px-8 pt-4 sm:pt-6 pb-3">
+        <motion.div ref={dialog} tabIndex={-1} key="lightbox"
+          className="fixed inset-0 z-[60] bg-black flex flex-col text-white lightbox outline-none"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }} role="dialog" aria-modal="true" aria-label={item.title}>
+          <div className="flex items-center justify-between gap-3 px-3 sm:px-5 shrink-0">
             <div className="min-w-0">
-              <div className="text-[10px] sm:text-xs tracking-[0.25em] uppercase opacity-40 mb-1">
-                {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+              <div className="text-[11px] tracking-[0.15em] text-white/45 tabular-nums" role="status" aria-live="polite" aria-atomic="true">
+                {index + 1} / {count}
               </div>
-              <div className="text-sm sm:text-base leading-snug">{item.title}</div>
-              {item.subtitle && <div className="text-xs sm:text-sm opacity-50 mt-1">{item.subtitle}</div>}
+              {!minimal && <>
+                <div className="text-sm leading-snug">{item.title}</div>
+                {item.subtitle && <div className="text-xs text-white/50">{item.subtitle}</div>}
+              </>}
             </div>
-            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-              <a
-                href={item.src}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-                aria-label="Открыть в полном размере"
-                title="Открыть в полном размере"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-6 h-6 sm:w-7 sm:h-7">
-                  <path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" strokeLinecap="round" strokeLinejoin="round" />
+            <div className="flex items-center gap-1 shrink-0">
+              <a href={item.src} target="_blank" rel="noopener noreferrer" aria-label="Открыть в полном размере"
+                className="w-11 h-11 flex items-center justify-center text-white/50 hover:text-white transition-colors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-5 h-5" aria-hidden="true">
+                  <path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" />
                 </svg>
               </a>
-              <button
-                onClick={onClose}
-                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-                aria-label="Закрыть"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 sm:w-10 sm:h-10">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+              <button onClick={onClose} aria-label="Закрыть"
+                className="w-11 h-11 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-6 h-6" aria-hidden="true">
+                  <path d="M6 6l12 12M6 18L18 6" />
                 </svg>
               </button>
             </div>
           </div>
-
-          {/* Изображение */}
-          <div
-            className="relative flex-1 min-h-0 flex items-center justify-center px-2 sm:px-20"
-            onClick={(e) => e.target === e.currentTarget && onClose()}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            <LightboxImage key={item.src} item={item} />
-
-            {count > 1 && (
-              <>
-                <NavButton side="left" onClick={() => go(-1)} />
-                <NavButton side="right" onClick={() => go(1)} />
-              </>
-            )}
+          <div className="flex flex-1 min-h-0 gap-1 px-1 sm:px-2">
+            {count > 1 && <div className="hidden sm:flex items-center"><NavButton side="left" onClick={() => go(-1)} /></div>}
+            <div className="relative flex-1 min-w-0 min-h-0"
+              onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchCancel={() => { touch.current = null; }}>
+              <LightboxImage key={item.src} item={item} />
+            </div>
+            {count > 1 && <div className="hidden sm:flex items-center"><NavButton side="right" onClick={() => go(1)} /></div>}
           </div>
-
-          {/* Миниатюры */}
-          {count > 1 && (
-            <div className="px-4 sm:px-8 py-3 sm:py-4">
-              <div className="flex gap-2 overflow-x-auto justify-start sm:justify-center pb-1">
-                {items.map((it, i) => (
-                  <button
-                    key={it.src}
-                    onClick={() => onChange(i)}
-                    className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 overflow-hidden border transition-all duration-300 ${
-                      i === index ? "border-white opacity-100" : "border-white/10 opacity-40 hover:opacity-80"
-                    }`}
-                    aria-label={`Показать ${i + 1}`}
-                  >
-                    <img src={it.thumb || it.src} alt="" className="w-full h-full object-cover" loading="lazy" />
-                  </button>
-                ))}
-              </div>
+          {count > 1 && <div className="sm:hidden flex justify-center items-center gap-10 py-1 shrink-0">
+            <NavButton side="left" onClick={() => go(-1)} />
+            <NavButton side="right" onClick={() => go(1)} />
+          </div>}
+          {!minimal && count > 1 && (
+            <div className="px-3 py-2 shrink-0 flex gap-2 overflow-x-auto">
+              {items.map((slide, i) => <button key={slide.src} onClick={() => onChange(i)}
+                aria-label={`Показать ${i + 1}`} aria-current={i === index ? "true" : undefined}
+                className={`shrink-0 w-12 h-12 border ${i === index ? "border-white" : "border-white/20 opacity-50"}`}>
+                <img src={slide.thumb || slide.src} alt="" loading="lazy" className="w-full h-full object-contain" />
+              </button>)}
             </div>
           )}
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>, document.body
   );
 }
 
 function NavButton({ side, onClick }) {
   const left = side === "left";
-  return (
-    <button
-      onClick={onClick}
-      className={`hidden sm:flex absolute top-1/2 -translate-y-1/2 ${
-        left ? "left-3 lg:left-6" : "right-3 lg:right-6"
-      } w-12 h-12 lg:w-14 lg:h-14 items-center justify-center border border-white/20 bg-black/40 backdrop-blur text-white/70 hover:text-white hover:border-white/60 transition-colors`}
-      aria-label={left ? "Предыдущее" : "Следующее"}
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-6 h-6">
-        <path d={left ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </button>
-  );
+  return <button onClick={onClick} aria-label={left ? "Предыдущее" : "Следующее"}
+    className="w-12 h-12 flex items-center justify-center text-white/55 hover:text-white transition-colors">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-6 h-6" aria-hidden="true">
+      <path d={left ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </button>;
 }
 
-// Native images remain visible even if a cached load event arrives before an effect.
+// A visible preview avoids blank frames during slow or cached image loads.
 function LightboxImage({ item }) {
-  const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const src = attempt ? `${item.src}?retry=${attempt}` : item.src;
-
-  return (
-    <div className="absolute inset-0 mx-2 sm:mx-20">
-      <img src={item.thumb || item.src} alt="" aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-contain" />
-      {!failed && (
-        <img key={src} src={src} alt={item.title} draggable={false}
-          ref={(img) => { if (img?.complete && img.naturalWidth > 0) setLoaded(true); }}
-          onLoad={() => setLoaded(true)} onError={() => setFailed(true)}
-          className="absolute inset-0 w-full h-full object-contain" />
-      )}
-      {!loaded && !failed && (
-        <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none" role="status" aria-label="Загрузка фотографии">
-          <div className="w-6 h-6 border border-white/30 border-t-white rounded-full animate-spin" />
-        </div>
-      )}
-      {failed && (
-        <div className="absolute bottom-3 inset-x-0 flex justify-center">
-          <button className="bg-black/85 border border-white/30 px-4 py-3 text-sm"
-            onClick={() => { setFailed(false); setLoaded(false); setAttempt((n) => n + 1); }}>
-            Фото не загрузилось — повторить
-          </button>
-        </div>
-      )}
+  return <div className="absolute inset-0 flex flex-col lightbox-image">
+    <div className="relative flex-1 min-h-0">
+      <img src={item.thumb || item.src} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-contain" />
+      {!failed && <img key={src} src={src} alt={item.title} draggable={false}
+        onError={() => setFailed(true)} className="absolute inset-0 w-full h-full object-contain" />}
     </div>
-  );
+    {failed && <button className="shrink-0 text-white/70 text-xs py-3" onClick={() => { setFailed(false); setAttempt((n) => n + 1); }}>
+      Фото не загрузилось — повторить
+    </button>}
+  </div>;
 }

@@ -108,30 +108,18 @@ export default function App() {
     []
   );
 
-  // Кейсы: все слайды подряд, чтобы стрелками можно было пройти всё портфолио
+  // Each carousel contains only the selected case, with its cover first.
   const caseItems = useMemo(
-    () =>
-      cases.flatMap((c) =>
-        c.slides.map((s, i) => ({
-          src: `/img/cases/${s}.webp`,
-          thumb: `/img/cases/${s}-sm.webp`,
-          title: c.title,
-          subtitle: c.slides.length > 1 ? `${c.tag} · слайд ${i + 1} из ${c.slides.length}` : c.tag,
-        }))
-      ),
+    () => cases.map((c) => c.slides.map((s) => ({
+      src: `/img/cases/${s}.webp`,
+      thumb: `/img/cases/${s}-sm.webp`,
+      title: c.title,
+    }))),
     []
   );
-  const caseStart = useMemo(() => {
-    let n = 0;
-    return cases.map((c) => {
-      const start = n;
-      n += c.slides.length;
-      return start;
-    });
-  }, []);
 
-  const openCert = (id) => setBox({ items: certItems, index: certificates.findIndex((c) => c.id === id) });
-  const openCase = (i) => setBox({ items: caseItems, index: caseStart[i] });
+  const openCert = (id) => setBox({ items: certItems, index: certificates.findIndex((c) => c.id === id), caseView: false });
+  const openCase = (i) => setBox({ items: caseItems[i], index: 0, caseView: true });
 
   const courseRow = (c, i) => (
     <Z.button
@@ -365,34 +353,35 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <SectionTitle index="04">Клинические случаи</SectionTitle>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8">
             {cases.map((c, i) => {
               const hidden = allCases ? "" : i >= 6 ? "hidden" : i >= 4 ? "hidden lg:block" : "";
               return (
                 <Z.button
-                  key={c.title + i}
-                  onClick={() => openCase(i)}
-                  className={`${hidden} group text-left`}
+                  key={c.id}
+                  onClick={(event) => { event.currentTarget.focus({ preventScroll: true }); openCase(i); }}
+                  className={`${hidden} group text-left case-card`}
                   initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  {/* Скрываем верхние 10% с названием и тегами; подписи к фото остаются. */}
-                  <div className="relative aspect-[10/9] overflow-hidden bg-black">
+                  {/* Prepared cover shown in full, including embedded labels. */}
+                  <div className="relative aspect-square bg-black">
                     <img
                       src={`/img/cases/${c.slides[0]}-sm.webp`}
-                      alt={`${c.title}: фото до и после лечения`}
+                      alt={`${c.title}: обложка клинического случая`}
                       loading="lazy"
-                      className="absolute bottom-0 left-0 w-full h-auto origin-bottom transition-transform duration-700 group-hover:scale-105"
+                      width="800" height="800" decoding="async"
+                      className="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-90"
                     />
                   </div>
                   <div className="pt-3 sm:pt-4">
                     <div className="text-[10px] tracking-[0.15em] uppercase text-white/35 mb-1 truncate">
                       {c.tag}
-                      {c.slides.length > 1 && <span className="text-white/25"> · {c.slides.length} фото</span>}
                     </div>
                     <div className="text-sm sm:text-lg leading-snug tracking-tight text-white/85 group-hover:text-white transition-colors line-clamp-2 min-h-[2.75em]">{c.title}</div>
+                    <div className="mt-2 text-[10px] sm:text-xs tracking-[0.12em] text-white/45 group-hover:text-white/70 transition-colors">Смотреть этапы <span aria-hidden="true">↗</span></div>
                   </div>
                 </Z.button>
               );
@@ -485,7 +474,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Lightbox items={box.items} index={box.index} onClose={() => setBox((b) => ({ ...b, index: null }))} onChange={(i) => setBox((b) => ({ ...b, index: i }))} />
+      <Lightbox minimal={box.caseView} items={box.items} index={box.index} onClose={() => setBox((b) => ({ ...b, index: null }))} onChange={(i) => setBox((b) => ({ ...b, index: i }))} />
     </div>
   );
 }
